@@ -123,10 +123,10 @@ router.delete("/:productID",(req,res,next)=>
     .catch(err=>{
         res.status(500).json({
             error: err
-        })
-    })
+        });
+    });
 
-})
+});
 
 router.patch("/:productID", (req,res,next)=>{ // router not finished , left the vid 30:20  , continue there 
     const id =req.params.productID;
