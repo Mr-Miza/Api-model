@@ -3,9 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Product API Consumer</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        img {
+            max-width: 100px; /* Adjust the max-width as needed */
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-    
+    <table id="product-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Product Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Product information from the API will be displayed here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to fetch product data from the API
+        function fetchProductData() {
+            fetch('http://localhost:3000/product')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    displayProductData(data);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        // Function to display product data in table format
+        function displayProductData(data) {
+            const productTable = document.getElementById('product-table').getElementsByTagName('tbody')[0];
+            // Clear previous content
+            productTable.innerHTML = '';
+
+            // Loop through each product in the data array
+            data.product.forEach(product => {
+                // Create a new table row
+                const row = productTable.insertRow();
+
+                // Insert cells into the row and populate them with product information
+                const nameCell = row.insertCell();
+                nameCell.textContent = product.name;
+
+                const priceCell = row.insertCell();
+                priceCell.textContent = product.price;
+
+                const imageCell = row.insertCell();
+                const image = document.createElement('img');
+                image.src = product.productImage;
+                image.alt = 'Product Image';
+                imageCell.appendChild(image);
+            });
+        }
+
+        // Call the fetchProductData function when the page loads
+        window.onload = fetchProductData;
+    </script>
 </body>
 </html>
